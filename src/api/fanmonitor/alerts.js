@@ -44,10 +44,10 @@ export function delAlerts(id) {
 }
 
 //获取告警信息
-export function listObjects(query){
+export function listObjects(alertId){
   return request({
-    url:'/fanmonitor/alertObjects/list',
-    method: 'get',
-    params: query
+    url:'/fanmonitor/alertObjects/listByAlertId/' + alertId,
+    method: 'get'
+    // params: query
   })
 }

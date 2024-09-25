@@ -19,10 +19,6 @@
     </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['fanmonitor:alerts:edit']">修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
           v-hasPermi="['fanmonitor:alerts:remove']">删除</el-button>
       </el-col>
@@ -161,8 +157,8 @@ export default {
     /** 查询告警信息并绘制图片 */
     openImagePreview(imgSrc,alertId) {
       listObjects(alertId).then(response => {
-        this.objs = response.data; // 假设返回的数据存储在 data 中
-        this.showAlertDetailsModal = true; // 控制显示弹出层
+        this.objs = response.rows; // 假设返回的数据存储在 data 中
+        alert(this.objs)
       }).catch(error => {
         this.$modal.msgError("获取报警信息失败");
       });
