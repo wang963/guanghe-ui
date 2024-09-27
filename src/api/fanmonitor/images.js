@@ -44,10 +44,9 @@ export function delImages(id) {
 }
 
 // 检测图片
-export function detectionimg(ids){
+export function detectionimg(ids, enhance_type){
   return request({
-    url: 'fanmonitor/images/detection',
-    method: 'post',
-    data:ids,
+    url: 'fanmonitor/images/detection?ids=' + ids + '&enhance_type=' + enhance_type,
+    method: 'get'
   })
 }

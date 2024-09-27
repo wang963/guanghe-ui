@@ -39,11 +39,11 @@
       </el-col>
       <!-- 识别信息 -->
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-camera" size="mini" :disabled="multiple" @click="detection"
+        <el-button type="danger" plain icon="el-icon-camera" size="mini" :disabled="multiple" @click="showEnhanceType"
           v-hasPermi="['fanmonitor:images:detection']">图片检测</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-picture" size="mini" :disabled="multiple" @click="detection"
+        <el-button type="danger" plain icon="el-icon-picture" size="mini" :disabled="multiple" @click=""
           v-hasPermi="['fanmonitor:images:detection']">图片增强</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -95,6 +95,26 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!--  增强类型选择框  -->
+    <el-dialog :title="title" :visible.sync="enhance_open" width="300px" append-to-body>
+      <el-form ref="form" label-width="80px">
+        <el-form-item label="增强类型" prop="enhance_type">
+          <el-select v-model="enhance_type">
+            <el-option
+              v-for="dict in dict.type.img_enhance_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="detection">确 定</el-button>
+        <el-button @click="cancelEnhanceType">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -103,6 +123,7 @@ import { listImages, getImages, delImages, addImages, updateImages, detectionimg
 
 export default {
   name: "Images",
+  dicts: ['img_enhance_type'],
   data() {
     return {
       // 遮罩层
@@ -123,6 +144,9 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示选择增强类型界面
+      enhance_open: false,
+      enhance_type: 'None',
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -246,18 +270,33 @@ export default {
         ...this.queryParams
       }, `images_${new Date().getTime()}.xlsx`)
     },
+
+    /* 打开选择增强类型对话框 */
+    showEnhanceType() {
+      this.enhance_open = true
+      this.title = "选择增强类型"
+    },
+
+    /* 选择增强类型_取消 */
+    cancelEnhanceType() {
+      this.enhance_open = false
+      this.enhance_type = 'None'
+      this.title = ''
+    },
+
     /** 调用图片检测接口 */
-    detection(row) {
-      const ids = row.id || this.ids;
+    detection() {
       // 直接调用 detectionimg 函数
-      detectionimg(ids)
+      detectionimg(this.ids, this.enhance_type)
         .then(() => {
           this.getList();
           this.$modal.msgSuccess("识别成功");
         })
         .catch(() => {
           this.$modal.msgError("识别失败");
-        });
+        }).finally(() => {
+          this.enhance_open = false
+      })
     }
 
   }
