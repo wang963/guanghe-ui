@@ -39,11 +39,11 @@
       </el-col>
       <!-- 识别信息 -->
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-camera" size="mini" :disabled="multiple" @click="showEnhanceType"
+        <el-button type="danger" plain icon="el-icon-camera" size="mini" :disabled="multiple" @click="showEnhanceType('detection')"
           v-hasPermi="['fanmonitor:images:detection']">图片检测</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-picture" size="mini" :disabled="multiple" @click=""
+        <el-button type="danger" plain icon="el-icon-picture" size="mini" :disabled="multiple" @click="showEnhanceType('enhance')"
           v-hasPermi="['fanmonitor:images:detection']">图片增强</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -111,7 +111,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="detection">确 定</el-button>
+        <el-button type="primary" @click="submitEnhanceType">确 定</el-button>
         <el-button @click="cancelEnhanceType">取 消</el-button>
       </div>
     </el-dialog>
@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import { listImages, getImages, delImages, addImages, updateImages, detectionimg } from "@/api/fanmonitor/images";
+import { listImages, getImages, delImages, addImages, updateImages, detectImg, enhanceImg } from "@/api/fanmonitor/images";
 
 export default {
   name: "Images",
@@ -147,6 +147,7 @@ export default {
       // 是否显示选择增强类型界面
       enhance_open: false,
       enhance_type: 'None',
+      operation: '',
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -272,7 +273,8 @@ export default {
     },
 
     /* 打开选择增强类型对话框 */
-    showEnhanceType() {
+    showEnhanceType(operation) {
+      this.operation = operation
       this.enhance_open = true
       this.title = "选择增强类型"
     },
@@ -282,12 +284,23 @@ export default {
       this.enhance_open = false
       this.enhance_type = 'None'
       this.title = ''
+      this.operation = ''
+    },
+
+    /* 选择增强类型_确定 */
+    submitEnhanceType() {
+      if (this.operation == 'detection') {
+          this.detection()
+      } else if (this.operation == 'enhance') {
+          this.enhance()
+      }
+      this.operation = ''
     },
 
     /** 调用图片检测接口 */
     detection() {
       // 直接调用 detectionimg 函数
-      detectionimg(this.ids, this.enhance_type)
+      detectImg(this.ids, this.enhance_type)
         .then(() => {
           this.getList();
           this.$modal.msgSuccess("识别成功");
@@ -296,6 +309,21 @@ export default {
           this.$modal.msgError("识别失败");
         }).finally(() => {
           this.enhance_open = false
+      })
+    },
+
+    /** 调用图片增强接口 */
+    enhance() {
+      // 直接调用 detectionimg 函数
+      enhanceImg(this.ids, this.enhance_type)
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("增强成功");
+        })
+        .catch(() => {
+          this.$modal.msgError("增强失败");
+        }).finally(() => {
+        this.enhance_open = false
       })
     }
 
