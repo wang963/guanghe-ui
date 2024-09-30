@@ -1,44 +1,44 @@
 import request from '@/utils/request'
 
-// 查询监控视频检测列表
+// 查询视频检测列表
 export function listVideoobj(query) {
   return request({
-    url: '/fanmonitor/videoobj/list',
+    url: '/windnacelle/videoobj/list',
     method: 'get',
     params: query
   })
 }
 
-// 查询监控视频检测详细
+// 查询视频检测详细
 export function getVideoobj(id) {
   return request({
-    url: '/fanmonitor/videoobj/' + id,
+    url: '/windnacelle/videoobj/' + id,
     method: 'get'
   })
 }
 
-// 新增监控视频检测
+// 新增视频检测
 export function addVideoobj(data) {
   return request({
-    url: '/fanmonitor/videoobj',
+    url: '/windnacelle/videoobj',
     method: 'post',
     data: data
   })
 }
 
-// 修改监控视频检测
+// 修改视频检测
 export function updateVideoobj(data) {
   return request({
-    url: '/fanmonitor/videoobj',
+    url: '/windnacelle/videoobj',
     method: 'put',
     data: data
   })
 }
 
-// 删除监控视频检测
+// 删除视频检测
 export function delVideoobj(id) {
   return request({
-    url: '/fanmonitor/videoobj/' + id,
+    url: '/windnacelle/videoobj/' + id,
     method: 'delete'
   })
 }
@@ -49,5 +49,23 @@ export function getCameras(query) {
     url: '/windnacelle/camera/list',
     method: 'get',
     params: query
+  })
+}
+
+//视频检测
+export function videoDetection(data){
+  return request({
+    url: '',
+    method:'post',
+    params:data
+  })
+}
+
+//视频增强
+export function videoEnhancement(data){
+  return request({
+    url: '',
+    method:'post',
+    params:data
   })
 }
