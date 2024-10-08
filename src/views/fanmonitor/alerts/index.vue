@@ -40,22 +40,23 @@
 
     <el-table v-loading="loading" :data="alertsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="风机编号" align="center" prop="device_name"/>
       <el-table-column label="告警时间" align="center" prop="alert_time" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.alert_time, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备名称" align="center" prop="device_name"/>
+
       <el-table-column label="摄像头区域" align="center" prop="camera"/>
-      <el-table-column label="摄像头IP地址" align="center" prop="cam_ipv4"/>
-      <el-table-column label="算法名称" align="center" prop="alg_name"/>
-      <el-table-column label="告警图片" align="center" prop="imgpath">
-        <template slot-scope="scope">
-          <image-preview :src="scope.row.imgpath" :width="50" :height="50"
-                         @click.native="openImagePreview(scope.row.imgpath, scope.row.id)"
-          />
-        </template>
-      </el-table-column>
+      <!--      <el-table-column label="摄像头IP地址" align="center" prop="cam_ipv4"/>-->
+      <el-table-column label="告警信息" align="center" prop="alg_name"/>
+            <el-table-column label="告警图片" align="center" prop="imgpath">
+              <template slot-scope="scope">
+                <image-preview :src="scope.row.imgpath" :width="50" :height="50"
+                               @click.native="openImagePreview(scope.row.imgpath, scope.row.id)"
+                />
+              </template>
+            </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -63,7 +64,17 @@
             type="text"
             icon="el-icon-delete"
             @click="openImagePreview(scope.row.imgpath, scope.row.id)"
-          >详细信息</el-button>
+          >查看
+          </el-button>
+        </template>
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="openImagePreview(scope.row.imgpath, scope.row.id)"
+          >处置
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -190,13 +201,13 @@ export default {
     /** 查询告警信息并绘制图片 */
     openImagePreview(imgSrc, alertId) {
       listObjects(alertId).then(response => {
-        this.objs = response.rows; // 假设返回的数据存储在 rows 中
-        this.currentImageSrc = imgSrc; // 设置当前图片源
-        this.isImagePreviewVisible = true; // 打开弹窗
+        this.objs = response.rows // 假设返回的数据存储在 rows 中
+        this.currentImageSrc = imgSrc // 设置当前图片源
+        this.isImagePreviewVisible = true // 打开弹窗
       }).catch(error => {
-        this.$modal.msgError("获取报警信息失败");
-      });
-    },
+        this.$modal.msgError('获取报警信息失败')
+      })
+    }
   }
 }
 </script>
