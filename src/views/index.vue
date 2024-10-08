@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import {listTemperature} from "../api/fanmonitor/alarm";
+
 import Three3d from "@/components/three3d/index.vue";
 export default {
   name: "Index",
@@ -13,7 +15,7 @@ export default {
     return {
       // 版本号
       version: "3.8.8",
-      timeData: {
+      timeData: {/*
         "变桨系统": {
             name: "变桨系统",
             value: "11",
@@ -79,7 +81,7 @@ export default {
             alarm: "温度超限",
             time: "11:30",
             unit: "°C"
-        }
+        }*/
     }
     };
   },
@@ -88,7 +90,11 @@ export default {
       window.open(href, "_blank");
     }, */
     getTimeData(){
-      this.timeData= {
+      listTemperature().then(response => {
+        this.timeData = response
+        console.log(response)
+      })
+      /*this.timeData= {
         "变桨系统": {
             name: "变桨系统",
             value: Math.random() * 90,
@@ -155,7 +161,7 @@ export default {
             time: "11:30",
             unit: "°C"
         }
-    }
+      }*/
 
     }
   },

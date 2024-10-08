@@ -42,3 +42,11 @@ export function delAlarm(id) {
     method: 'delete'
   })
 }
+
+// 获取部件温度列表
+export function listTemperature() {
+  return request({
+    url: '/fanmonitor/temperature/listCompTemperature',
+    method: 'get'
+  })
+}

@@ -2,25 +2,36 @@
   <div class="app-container home">
 
 
-    <Three3d></Three3d>
+    <Three3d :labelData="timeData"></Three3d>
   </div>
 </template>
 
 <script>
 import Three3d from "@/components/three3d/index.vue";
+import {listTemperature} from "../api/fanmonitor/alarm";
 export default {
   name: "Index",
   components: { Three3d },
   data() {
     return {
       // 版本号
-      version: "3.8.8"
+      version: "3.8.8",
+      timeData: {}
     };
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
+    },
+    getTimeData() {
+      listTemperature().then(response => {
+        this.timeData = response
+        console.log(response)
+      })
     }
+  },
+  mounted() {
+    this.getTimeData()
   }
 };
 </script>
