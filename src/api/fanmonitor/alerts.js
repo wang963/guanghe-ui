@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询告警信息列表
 export function listAlerts(query) {
   return request({
-    url: '/fanmonitor/alerts/list',
+    url: '/fanmonitor/alerts/listDto',
     method: 'get',
     params: query
   })
